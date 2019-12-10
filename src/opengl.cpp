@@ -25,9 +25,9 @@ void WindowBase::init(int width, int height, char* windowName) {
 
     //atexit(glfwTerminate);
 
-    //glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-    //glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
-    //glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //GLFWバージョン3.2
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
     glfwWindow = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
     if (glfwWindow == NULL) {
@@ -100,7 +100,7 @@ void WindowBase::display(void) {
 
 void WindowBase::keyboard(int key, int scancode, int action, int mods) {
     std::cout << "keyboard Child" << std::endl;
-    if(key == 256) glfwDestroyWindow(glfwWindow);   //exit(0);
+    if(key == 256) glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE); //glfwDestroyWindow(glfwWindow);   //exit(0);
 }
 
 void WindowBase::mouseScroll(double x, double y) {
