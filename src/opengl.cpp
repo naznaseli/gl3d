@@ -14,20 +14,18 @@ void WindowBase::init(int width, int height, char* windowName) {
     windowWidth = width;
     windowHeight = height;
 
-    //glfw初期化
-    //glfwInit();
+    //GLFW初期化
     if (glfwInit() == GL_FALSE) {
+        //初期化失敗
         std::cerr << "error" << std::endl;
         getchar();
         //return 1;
         return;
     }
 
-    //atexit(glfwTerminate);
-
     //GLFWバージョン3.2
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
     glfwWindow = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
     if (glfwWindow == NULL) {
@@ -107,8 +105,11 @@ void WindowBase::mouseScroll(double x, double y) {
 
 }
 
-void WindowBase::resize(int widht, int height) {
+void WindowBase::resize(int width, int height) {
     std::cout << "resize Child" << std::endl;
+    glViewport(0, 0, width, height);
+    glLoadIdentity();
+    gluPerspective(30.0, 1.0, 1.0, 10.0);
 }
 
 void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
