@@ -1,23 +1,30 @@
 #include "opengl.hpp"
+#include <stdio.h>
 
-WindowBase::WindowBase() {
-    std::cout << "base create" << std::endl;
+WindowBase::WindowBase()
+{
+    //std::cout << "base create" << std::endl;
+    printf("WindowBase created\n");
 
 }
 
-WindowBase::~WindowBase() {
-    std::cout << "base delete" << std::endl;
+WindowBase::~WindowBase()
+{
+    //std::cout << "base delete" << std::endl;
+    printf("WindowBase deleted\n");
     glfwTerminate();
 }
 
-void WindowBase::init(int width, int height, char* windowName) {
+void WindowBase::init(int width, int height, char* windowName)
+{
     windowWidth = width;
     windowHeight = height;
 
     //GLFW初期化
     if (glfwInit() == GL_FALSE) {
         //初期化失敗
-        std::cerr << "error" << std::endl;
+        //std::cerr << "error" << std::endl;
+        printf("GLFW initialize error\n");
         getchar();
         //return 1;
         return;
@@ -29,7 +36,8 @@ void WindowBase::init(int width, int height, char* windowName) {
 
     glfwWindow = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
     if (glfwWindow == NULL) {
-        std::cerr << "window error" << std::endl;
+        //std::cerr << "window error" << std::endl;
+        printf("GLFW create window error\n");
         //return 1;
         return;
     }
@@ -47,7 +55,8 @@ void WindowBase::init(int width, int height, char* windowName) {
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
         //初期化失敗
-        std::cerr << "error init glew" << std::endl;
+        //std::cerr << "error init glew" << std::endl;
+        printf("GLEW initialize error\n");
         //return 1;
         return;
     }
@@ -55,18 +64,21 @@ void WindowBase::init(int width, int height, char* windowName) {
     glInit();
 }
 
-void WindowBase::glInit(void) {
+void WindowBase::glInit(void)
+{
     glClearColor(0.0, 0.0, 0.0, 0.0);
 }
 
-bool WindowBase::isExist(void) {
+bool WindowBase::isExist(void)
+{
     return !(glfwWindowShouldClose(glfwWindow));
 }
 
 //継承するなら内部にglfw関数なくす
-void WindowBase::run(void) {
+void WindowBase::run(void)
+{
     //画面消去
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //描画処理
     display();
@@ -80,8 +92,9 @@ void WindowBase::run(void) {
 }
 
 //継承する仮想関数
-void WindowBase::display(void) {
-    glClear(GL_COLOR_BUFFER_BIT);
+void WindowBase::display(void)
+{
+    //glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_POLYGON);
     glColor3d(1.0, 0.0, 0.0);
     glVertex2d(-0.9, -0.9);
@@ -96,24 +109,28 @@ void WindowBase::display(void) {
     glFlush();
 }
 
-void WindowBase::keyboard(int key, int scancode, int action, int mods) {
-    std::cout << "keyboard Child" << std::endl;
-    if(key == 256) glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE); //glfwDestroyWindow(glfwWindow);   //exit(0);
+void WindowBase::keyboard(int key, int scancode, int action, int mods)
+{
+    printf("keyboard Child\n");
+    if(key == 256) glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 }
 
-void WindowBase::mouseScroll(double x, double y) {
+void WindowBase::mouseScroll(double x, double y)
+{
 
 }
 
-void WindowBase::resize(int width, int height) {
-    std::cout << "resize Child" << std::endl;
+void WindowBase::resize(int width, int height)
+{
+    printf("resize Child\n");
     glViewport(0, 0, width, height);
     glLoadIdentity();
     gluPerspective(30.0, 1.0, 1.0, 10.0);
 }
 
-void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    std::cout << "skeyboard" << std::endl;
+void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    printf("skeyboard\n");
 
     //ポインタからクラスのインスタンスを取得
     WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
@@ -122,12 +139,14 @@ void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int acti
     windowBase->keyboard(key, scancode, action, mods);
 }
 
-void WindowBase::mouseScrollCallback(GLFWwindow* window, double x, double y) {
+void WindowBase::mouseScrollCallback(GLFWwindow* window, double x, double y)
+{
 
 }
 
-void WindowBase::windowSizeCallback(GLFWwindow* window, int width, int height) {
-    std::cout << "sresize" << std::endl;
+void WindowBase::windowSizeCallback(GLFWwindow* window, int width, int height)
+{
+    printf("sresize\n");
 
     //ポインタからクラスのインスタンスを取得
     WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));

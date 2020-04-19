@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
-#include <gl/glew.h>
+//#include <iostream>
+#include <GL/glew.h>
 //#define GLFW_INCLUDE_GLU
-#include <gl/glfw3.h>
+#include <GLFW/glfw3.h>
 
 class WindowBase {
 public:
