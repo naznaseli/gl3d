@@ -1,45 +1,40 @@
 #include "opengl.hpp"
-#include <stdio.h>
+//#include <stdio.h>
 
 WindowBase::WindowBase()
 {
-    //std::cout << "base create" << std::endl;
-    printf("WindowBase created\n");
-
+    //printf("WindowBase created\n");
 }
 
 WindowBase::~WindowBase()
 {
-    //std::cout << "base delete" << std::endl;
-    printf("WindowBase deleted\n");
+    //printf("WindowBase deleted\n");
     glfwTerminate();
 }
 
-void WindowBase::init(int width, int height, char* windowName)
+//GLFW, GLEW初期化、ウィンドウ作成
+int WindowBase::init(int width, int height, char* windowName)
 {
-    windowWidth = width;
-    windowHeight = height;
+    m_windowWidth = width;
+    m_windowHeight = height;
 
     //GLFW初期化
     if (glfwInit() == GL_FALSE) {
         //初期化失敗
-        //std::cerr << "error" << std::endl;
-        printf("GLFW initialize error\n");
-        getchar();
-        //return 1;
-        return;
+        //printf("GLFW initialize error\n");
+        return -1;
     }
 
     //GLFWバージョン3.2
     //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    //ウィンドウ非表示
+    //glfwWindowHint(GLFW_VISIBLE, 0);
 
-    glfwWindow = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
+    glfwWindow = glfwCreateWindow(width, height, windowName, NULL, NULL);
     if (glfwWindow == NULL) {
-        //std::cerr << "window error" << std::endl;
-        printf("GLFW create window error\n");
-        //return 1;
-        return;
+        //printf("GLFW create window error\n");
+        return -2;
     }
 
     //静的メンバ関数をコールバックに登録
@@ -48,33 +43,37 @@ void WindowBase::init(int width, int height, char* windowName)
     glfwSetWindowSizeCallback(glfwWindow, windowSizeCallback);
 
     //ウィンドウを処理対象にする
-    glfwMakeContextCurrent(glfwWindow);
+    glfwMakeContextCurrent(glfwWindow); //GLEW初期化より前
     glfwSwapInterval(1);
 
     //GLEWの初期化
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
         //初期化失敗
-        //std::cerr << "error init glew" << std::endl;
-        printf("GLEW initialize error\n");
-        //return 1;
-        return;
+        //printf("GLEW initialize error\n");
+        return -3;
     }
 
     glInit();
+
+    return 0;
 }
 
+//! 描画の初期化
 void WindowBase::glInit(void)
 {
     glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
 }
 
+//! ウィンドウ存在確認
+//! @param out
+//!     true:存在、false:消えてる
 bool WindowBase::isExist(void)
 {
     return !(glfwWindowShouldClose(glfwWindow));
 }
 
-//継承するなら内部にglfw関数なくす
 void WindowBase::run(void)
 {
     //画面消去
@@ -91,10 +90,9 @@ void WindowBase::run(void)
     glfwPollEvents();
 }
 
-//継承する仮想関数
+//! 描画
 void WindowBase::display(void)
 {
-    //glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_POLYGON);
     glColor3d(1.0, 0.0, 0.0);
     glVertex2d(-0.9, -0.9);
@@ -109,28 +107,129 @@ void WindowBase::display(void)
     glFlush();
 }
 
-void WindowBase::keyboard(int key, int scancode, int action, int mods)
+//! 座標軸を描く
+void WindowBase::draw3Axis(float xPos, float yPos, float zPos)
 {
-    printf("keyboard Child\n");
-    if(key == 256) glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+    //先の長さ
+    float distance = 100.0;
+    //線の太さ
+    glLineWidth(3);
+
+    //X軸描画
+    glColor3f(1.0, 0.0, 0.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(xPos, yPos, zPos);
+    glVertex3d(xPos + distance, yPos, zPos);
+    glEnd();
+
+    //Y軸描画
+    glColor3f(0.0, 1.0, 0.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(xPos, yPos, zPos);
+    glVertex3d(xPos, yPos + distance, zPos);
+    glEnd();
+
+    //Z軸描画
+    glColor3f(0.0, 0.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(xPos, yPos, zPos);
+    glVertex3d(xPos, yPos, zPos + distance);
+    glEnd();
 }
 
+//! 直方体描画
+//! @param in
+//!     float size:    一辺の長さ
+void WindowBase::drawSolidCube(float size)
+{
+    glBegin(GL_QUADS);
+    glVertex3d(size / 2, size / 2, size / 2);
+    glVertex3d(-size / 2, size / 2, size / 2);
+    glVertex3d(-size / 2, -size / 2, size / 2);
+    glVertex3d(size / 2, -size / 2, size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3d(size / 2, -size / 2, -size / 2);
+    glVertex3d(-size / 2, -size / 2, -size / 2);
+    glVertex3d(-size / 2, size / 2, -size / 2);
+    glVertex3d(size / 2, size / 2, -size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3d(size / 2, size / 2, size / 2);
+    glVertex3d(size / 2, -size / 2, size / 2);
+    glVertex3d(size / 2, -size / 2, -size / 2);
+    glVertex3d(size / 2, size / 2, -size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3d(-size / 2, size / 2, -size / 2);
+    glVertex3d(-size / 2, -size / 2, -size / 2);
+    glVertex3d(-size / 2, -size / 2, size / 2);
+    glVertex3d(-size / 2, size / 2, size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3d(size / 2, size / 2, size / 2);
+    glVertex3d(size / 2, size / 2, -size / 2);
+    glVertex3d(-size / 2, size / 2, -size / 2);
+    glVertex3d(-size / 2, size / 2, size / 2);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3d(-size / 2, -size / 2, size / 2);
+    glVertex3d(-size / 2, -size / 2, -size / 2);
+    glVertex3d(size / 2, -size / 2, -size / 2);
+    glVertex3d(size / 2, -size / 2, size / 2);
+    glEnd();
+}
+
+//! keyboard callback
+void WindowBase::keyboard(int key, int scancode, int action, int mods)
+{
+    //printf("keyboard\n");
+    static bool shiftPressed = false;
+    switch (key)
+    {
+    case 256:   //'ESC'
+        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+        break;
+    case 340:   //ShiftL
+        //fall through
+    case 344:   //ShiftR
+        if (action == GLFW_PRESS) shiftPressed = true;
+        else if (action == GLFW_RELEASE) shiftPressed = false;
+        break;
+    case 86:    //'v'
+        //ウィンドウ表示切り替え
+        //非表示にするとキーコールバックが行われなくなるので実質非表示のみ
+        if (action == GLFW_PRESS)
+        {
+            int visible = glfwGetWindowAttrib(glfwWindow, GLFW_VISIBLE);
+            if (visible)
+                glfwHideWindow(glfwWindow);
+            else
+                glfwShowWindow(glfwWindow);
+        }
+    default: break;
+    }
+}
+
+//! maouse callback
 void WindowBase::mouseScroll(double x, double y)
 {
 
 }
 
+//! resize callback
 void WindowBase::resize(int width, int height)
 {
-    printf("resize Child\n");
+    //printf("resize\n");
     glViewport(0, 0, width, height);
     glLoadIdentity();
     gluPerspective(30.0, 1.0, 1.0, 10.0);
 }
 
+//! static keyboard callback
 void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    printf("skeyboard\n");
+    //printf("skeyboard\n");
 
     //ポインタからクラスのインスタンスを取得
     WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
@@ -139,14 +238,16 @@ void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int acti
     windowBase->keyboard(key, scancode, action, mods);
 }
 
+//! static mouse callback
 void WindowBase::mouseScrollCallback(GLFWwindow* window, double x, double y)
 {
 
 }
 
+//! static resize callback
 void WindowBase::windowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    printf("sresize\n");
+    //printf("sresize\n");
 
     //ポインタからクラスのインスタンスを取得
     WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
