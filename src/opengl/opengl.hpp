@@ -38,9 +38,8 @@ public:
 
 protected:
     GLFWwindow* glfwWindow;
-    int m_windowWidth, m_windowHeight;
+    unsigned int m_windowWidth, m_windowHeight;
 
 private:
 
 };
-

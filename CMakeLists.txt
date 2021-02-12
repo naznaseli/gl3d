@@ -13,7 +13,7 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin" CACHE PATH "Output director
 set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 
 # option
-option(OPTION_BUILD_EXAMPLES "Build example programs" OFF)
+option(OPTION_BUILD_EXAMPLES "Build example programs" ON)
 option(OPTION_BUILD_TESTS "Build test programs" OFF)
 option(OPTION_BUILD_SHARED_LIBS "Build shared libraries" OFF)
 

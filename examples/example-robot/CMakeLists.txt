@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(target opengl)
+set(target example-robot)
 
 set(include_path "./")
 set(source_path "./")
@@ -51,17 +51,15 @@ if(NOT OpenGL_FOUND)
 endif()
 
 set(headers
-    ${include_path}/opengl.hpp
-    #${include_path}/gl_func.hpp
+    ${include_path}/example-robot.hpp
 )
 
 set(sources
-    ${source_path}/opengl.cpp
-    #${source_path}/gl_func.cpp
+    ${source_path}/example-robot.cpp
+    ${source_path}/main.cpp
 )
 
-add_library(${target}
-    STATIC
+add_executable(${target}
     ${sources}
     ${headers}
 )
@@ -74,14 +72,15 @@ target_compile_options(${target}
 
 target_include_directories(${target}
     PUBLIC
-    ${OpenCV_INCLUDE_DIRS}
+    #${OpenCV_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/src/opengl
 )
 
 target_link_libraries(${target}
     PUBLIC
-    #${OpenCV_LIBRARIES}
+    opengl
     ${OPENGL_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${GLEW_LIBRARIES}
