@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 add_definitions(-std=c++11)
 
-set(target example-robot)
+set(target draw)
 
 set(include_path "./")
 set(source_path "./")
@@ -11,10 +11,10 @@ if(MSVC)
     #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #+ include directories
     #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if(NOT OpenCV_FOUND)
-        #set(OpenCV_DIR "C:/lib/opencv-4.3.0/build/install")
-        #find_package(OpenCV REQUIRED PATHS "C:/lib/opencv-4.3.0/build/install")
-    endif()
+    #if(NOT OpenCV_FOUND)
+    #    #set(OpenCV_DIR "C:/lib/opencv-4.3.0/build/install")
+    #    #find_package(OpenCV REQUIRED PATHS "C:/lib/opencv-4.3.0/build/install")
+    #endif()
     if(NOT OPENGL_LIBRARIES)
         set(OPENGL_LIBRARIES "opengl32;glu32")
     endif()
@@ -53,15 +53,17 @@ if(NOT OpenGL_FOUND)
 endif()
 
 set(headers
-    ${include_path}/example-robot.hpp
+    ${include_path}/draw.hpp
+    #${include_path}/gl_func.hpp
 )
 
 set(sources
-    ${source_path}/example-robot.cpp
-    ${source_path}/main.cpp
+    ${source_path}/draw.cpp
+    #${source_path}/gl_func.cpp
 )
 
-add_executable(${target}
+add_library(${target}
+    STATIC
     ${sources}
     ${headers}
 )
@@ -74,17 +76,14 @@ target_compile_options(${target}
 
 target_include_directories(${target}
     PUBLIC
-    #${OpenCV_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
-    ${PROJECT_SOURCE_DIR}/src/opengl
-    ${PROJECT_SOURCE_DIR}/src/draw
 )
 
 target_link_libraries(${target}
     PUBLIC
-    opengl
-    draw
+    #${OpenCV_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${GLEW_LIBRARIES}

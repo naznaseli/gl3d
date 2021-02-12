@@ -1,4 +1,6 @@
 #include "example-robot.hpp"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 Window::Window()
 {
@@ -14,57 +16,83 @@ void Window::display(void)
 {
     resize(m_windowWidth, m_windowHeight);
 
+    gl::draw3Axis(0, 0, 0);
+
     //床
     if(1)
     {
         glColor3d(0.6, 0.6, 0.6);
         glPushMatrix();
         glTranslated(0, 0, -500);
-        drawSolidCube(1000);
+        gl::drawSolidCube(1000);
         glPopMatrix();
     }
 
     //胴体
     glColor3d(0.0, 0.0, 1.0);
     glPushMatrix();
-    glTranslated(0, 0, 500);
-    drawSolidCube(400);
-    glPopMatrix();
+    glTranslated(0, 0, 750);
+    gl::drawSolidRectangular(200, 100, 500);
 
     //頭
     glColor3d(0.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslated(0, 0, 700);
-    drawSolidCube(100);
+    glTranslated(0, 0, 250);
+    glRotated(30, 1.0, 0.0, 0.0);   //+:うなずく
+    gl::drawSolidRectangular2(80, 80, 120);
     glPopMatrix();
 
-    //右腕
-    glColor3d(0.0, 1.0, 1.0);
+    //左腕
+    glColor3d(0.0, 1.0, 1.0);   //水色
     glPushMatrix();
-    glTranslated(200, 0, 500);
-    drawSolidCube(100);
-    glPopMatrix();
+    glTranslated(150, 0, 250);
+    glRotated(180 - 30, 1, 0, 0);   //-:腕前から挙げる
+    gl::drawSolidRectangular2(80, 80, 200);
+    //左手
+    glColor3d(1.0, 0.0, 0.0);   //赤
+    glTranslated(0, 0, 200);
+    glRotated(-30, 1, 0, 0);
+    gl::drawSolidRectangular2(80, 80, 200);
+    glPopMatrix();  //左腕
 
     //右腕
     glColor3d(1.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslated(-200, 0, 500);
-    drawSolidCube(100);
+    glTranslated(-150, 0, 250);
+    glRotated(180 - 30, 1, 0, 0);   //-:腕前から挙げる
+    gl::drawSolidRectangular2(80, 80, 200);
+    //右手
+    glTranslated(0, 0, 200);
+    glRotated(-30, 1, 0, 0);
+    gl::drawSolidRectangular2(80, 80, 200);
     glPopMatrix();
 
-    //左足
+    //左大腿
     glColor3d(1.0, 0.0, 1.0);
     glPushMatrix();
-    glTranslated(100, 0, 300);
-    drawSolidCube(100);
+    glTranslated(70, 0, -250);
+    glRotated(180 - 30, 1, 0, 0);
+    gl::drawSolidRectangular2(100, 100, 250);
+    //左足
+    glColor3d(1.0, 1.0, 0.0);
+    glTranslated(0, 0, 250);
+    glRotated(30, 1, 0, 0);
+    gl::drawSolidRectangular2(100, 100, 250);
     glPopMatrix();
 
-    //右足
+    //右大腿
     glColor3d(1.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslated(-100, 0, 300);
-    drawSolidCube(100);
+    glTranslated(-70, 0, -250);
+    glRotated(180 - 0, 1, 0, 0);
+    gl::drawSolidRectangular2(100, 100, 250);
+    //右足
+    glTranslated(0, 0, 250);
+    glRotated(0, 1, 0, 0);
+    gl::drawSolidRectangular2(100, 100, 250);
     glPopMatrix();
+
+    glPopMatrix();  //胴体
 
     glFlush();
 }
@@ -81,19 +109,19 @@ void Window::drawBlocks(void)
 
         glPushMatrix();
         glTranslated(1250, (double(i) + 0.5) * Size, 250);   //平行移動値の設定
-        drawSolidCube((float)Size);
+        gl::drawSolidCube((float)Size);
         glPopMatrix();
         glPushMatrix();
         glTranslated(1250, (double(i) + 0.5) * Size, 750);   //平行移動値の設定
-        drawSolidCube((float)Size);
+        gl::drawSolidCube((float)Size);
         glPopMatrix();
         glPushMatrix();
         glTranslated(1250, (double(i) + 0.5) * Size, 1250);   //平行移動値の設定
-        drawSolidCube((float)Size);
+        gl::drawSolidCube((float)Size);
         glPopMatrix();
         glPushMatrix();
         glTranslated(1250, (double(i) + 0.5) * Size, 1750);   //平行移動値の設定
-        drawSolidCube((float)Size);
+        gl::drawSolidCube((float)Size);
         glPopMatrix();
     }
 }

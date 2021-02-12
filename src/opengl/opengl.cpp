@@ -71,7 +71,7 @@ void WindowBase::glInit(void)
     //カメラパラメタ設定
     m_cameraPos[0] = 0;
     m_cameraPos[1] = -3000;
-    m_cameraPos[2] = 500;
+    m_cameraPos[2] = 1000;
     m_cameraDir[0] = 0;
     m_cameraDir[1] = 0;
     m_cameraDir[2] = 0;
@@ -124,78 +124,7 @@ void WindowBase::display(void)
     glFlush();
 }
 
-//! 座標軸を描く
-void WindowBase::draw3Axis(float xPos, float yPos, float zPos)
-{
-    //先の長さ
-    float distance = 100.0;
-    //線の太さ
-    glLineWidth(3);
 
-    //X軸描画
-    glColor3f(1.0, 0.0, 0.0);
-    glBegin(GL_LINE_LOOP);
-    glVertex3d(xPos, yPos, zPos);
-    glVertex3d(xPos + distance, yPos, zPos);
-    glEnd();
-
-    //Y軸描画
-    glColor3f(0.0, 1.0, 0.0);
-    glBegin(GL_LINE_LOOP);
-    glVertex3d(xPos, yPos, zPos);
-    glVertex3d(xPos, yPos + distance, zPos);
-    glEnd();
-
-    //Z軸描画
-    glColor3f(0.0, 0.0, 1.0);
-    glBegin(GL_LINE_LOOP);
-    glVertex3d(xPos, yPos, zPos);
-    glVertex3d(xPos, yPos, zPos + distance);
-    glEnd();
-}
-
-//! 直方体描画
-//! @param in
-//!     float size:    一辺の長さ
-void WindowBase::drawSolidCube(float size)
-{
-    glBegin(GL_QUADS);
-    glVertex3d(size / 2, size / 2, size / 2);
-    glVertex3d(-size / 2, size / 2, size / 2);
-    glVertex3d(-size / 2, -size / 2, size / 2);
-    glVertex3d(size / 2, -size / 2, size / 2);
-    glEnd();
-    glBegin(GL_QUADS);
-    glVertex3d(size / 2, -size / 2, -size / 2);
-    glVertex3d(-size / 2, -size / 2, -size / 2);
-    glVertex3d(-size / 2, size / 2, -size / 2);
-    glVertex3d(size / 2, size / 2, -size / 2);
-    glEnd();
-    glBegin(GL_QUADS);
-    glVertex3d(size / 2, size / 2, size / 2);
-    glVertex3d(size / 2, -size / 2, size / 2);
-    glVertex3d(size / 2, -size / 2, -size / 2);
-    glVertex3d(size / 2, size / 2, -size / 2);
-    glEnd();
-    glBegin(GL_QUADS);
-    glVertex3d(-size / 2, size / 2, -size / 2);
-    glVertex3d(-size / 2, -size / 2, -size / 2);
-    glVertex3d(-size / 2, -size / 2, size / 2);
-    glVertex3d(-size / 2, size / 2, size / 2);
-    glEnd();
-    glBegin(GL_QUADS);
-    glVertex3d(size / 2, size / 2, size / 2);
-    glVertex3d(size / 2, size / 2, -size / 2);
-    glVertex3d(-size / 2, size / 2, -size / 2);
-    glVertex3d(-size / 2, size / 2, size / 2);
-    glEnd();
-    glBegin(GL_QUADS);
-    glVertex3d(-size / 2, -size / 2, size / 2);
-    glVertex3d(-size / 2, -size / 2, -size / 2);
-    glVertex3d(size / 2, -size / 2, -size / 2);
-    glVertex3d(size / 2, -size / 2, size / 2);
-    glEnd();
-}
 
 //! keyboard callback
 void WindowBase::keyboard(int key, int scancode, int action, int mods)

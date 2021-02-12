@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "opengl.hpp"
+#include "draw.hpp"
 
 class Window : public WindowBase
 {

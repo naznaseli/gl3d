@@ -6,4 +6,4 @@ add_definitions(-std=c++11)
 # Add subdirectories
 #----------------------------------------------------------------------
 add_subdirectory(opengl)
-#add_subdirectory(gl_func)
+add_subdirectory(draw)
