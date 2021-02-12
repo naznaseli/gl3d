@@ -1,6 +1,5 @@
 OpenGL_Library
-
-====
+===
 
 OpenGL class library using GLFW and GLEW.
 
