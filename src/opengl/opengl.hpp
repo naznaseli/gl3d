@@ -39,6 +39,9 @@ public:
 protected:
     GLFWwindow* glfwWindow;
     unsigned int m_windowWidth, m_windowHeight;
+    double m_cameraPos[3];
+    double m_cameraDir[3];
+    double m_cameraUpward[3];
 
 private:
 

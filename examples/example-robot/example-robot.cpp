@@ -2,7 +2,7 @@
 
 Window::Window()
 {
-    init(1920, 1080, (char*)"example-robot");
+
 }
 
 Window::~Window()
@@ -14,34 +14,92 @@ void Window::display(void)
 {
     resize(m_windowWidth, m_windowHeight);
 
-    //glBegin(GL_POLYGON);
-    //glColor3d(1.0, 0.0, 0.0);
-    //glVertex2d(-0.9, -0.9);
-    //glColor3d(0.0, 1.0, 0.0);
-    //glVertex2d(0.9, -0.9);
-    //glColor3d(0.0, 0.0, 1.0);
-    //glColor3d(0.0, 0.0, 1.0);
-    //glVertex2d(0.9, 0.9);
-    //glColor3d(1.0, 1.0, 0.0);
-    //glVertex2d(-0.9, 0.9);
-    //glEnd();
+    //床
+    if(1)
+    {
+        glColor3d(0.6, 0.6, 0.6);
+        glPushMatrix();
+        glTranslated(0, 0, -500);
+        drawSolidCube(1000);
+        glPopMatrix();
+    }
 
-    glBegin(GL_POLYGON);
-    glVertex3d(100, 100, 100);
-    glVertex3d(-100, 100, 100);
-    glVertex3d(-100, 100, -100);
-    glVertex3d(100, 100, -100);
+    //胴体
+    glColor3d(0.0, 0.0, 1.0);
+    glPushMatrix();
+    glTranslated(0, 0, 500);
+    drawSolidCube(400);
+    glPopMatrix();
 
-    glEnd();
+    //頭
+    glColor3d(0.0, 1.0, 0.0);
+    glPushMatrix();
+    glTranslated(0, 0, 700);
+    drawSolidCube(100);
+    glPopMatrix();
+
+    //右腕
+    glColor3d(0.0, 1.0, 1.0);
+    glPushMatrix();
+    glTranslated(200, 0, 500);
+    drawSolidCube(100);
+    glPopMatrix();
+
+    //右腕
+    glColor3d(1.0, 0.0, 0.0);
+    glPushMatrix();
+    glTranslated(-200, 0, 500);
+    drawSolidCube(100);
+    glPopMatrix();
+
+    //左足
+    glColor3d(1.0, 0.0, 1.0);
+    glPushMatrix();
+    glTranslated(100, 0, 300);
+    drawSolidCube(100);
+    glPopMatrix();
+
+    //右足
+    glColor3d(1.0, 1.0, 0.0);
+    glPushMatrix();
+    glTranslated(-100, 0, 300);
+    drawSolidCube(100);
+    glPopMatrix();
 
     glFlush();
 }
 
+void Window::drawBlocks(void)
+{
+    double Size = 500; //1辺の長さ[mm]
+    int BoxNum = 10;
+
+    for (int i = 0; i < BoxNum; i++)
+    {
+        if(i % 2 == 0) glColor3d(0.6, 0.6, 0.6);
+        else glColor3d(0.3, 0.3, 0.3);
+
+        glPushMatrix();
+        glTranslated(1250, (double(i) + 0.5) * Size, 250);   //平行移動値の設定
+        drawSolidCube((float)Size);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslated(1250, (double(i) + 0.5) * Size, 750);   //平行移動値の設定
+        drawSolidCube((float)Size);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslated(1250, (double(i) + 0.5) * Size, 1250);   //平行移動値の設定
+        drawSolidCube((float)Size);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslated(1250, (double(i) + 0.5) * Size, 1750);   //平行移動値の設定
+        drawSolidCube((float)Size);
+        glPopMatrix();
+    }
+}
+
 void Window::keyboard(int key, int scancode, int action, int mods)
 {
-
-    //printf("keyboard callback\n");
-    //printf("key:%d\n", key);
     static bool shiftPressed = false;
     switch (key)
     {
@@ -54,21 +112,18 @@ void Window::keyboard(int key, int scancode, int action, int mods)
         if (action == GLFW_PRESS) shiftPressed = true;
         else if (action == GLFW_RELEASE) shiftPressed = false;
         break;
-    //case 88:    //'x'
-    //    printf("x pressed.\n");
-    //    if(shiftPressed) m_cameraParam.posWidth += 50;
-    //    else m_cameraParam.posWidth -= 50;
-    //    break;
-    //case 89:    //'y'
-    //    printf("y pressed.\n");
-    //    if(shiftPressed) m_cameraParam.posDepth += 50;
-    //    else m_cameraParam.posDepth -= 50;
-    //    break;
-    //case 90:    //'z'
-    //    printf("z pressed.\n");
-    //    if(shiftPressed) m_cameraParam.posHeight += 50;
-    //    else m_cameraParam.posHeight -= 50;
-    //    break;
+    case 88:    //'x'
+        if(shiftPressed) m_cameraPos[0] += 500;
+        else m_cameraPos[0] -= 500;
+        break;
+    case 89:    //'y'
+        if(shiftPressed) m_cameraPos[1] += 500;
+        else m_cameraPos[1] -= 500;
+        break;
+    case 90:    //'z'
+        if(shiftPressed) m_cameraPos[2] += 500;
+        else m_cameraPos[2] -= 500;
+        break;
     case 87:    //'w'
         //if (action == GLFW_PRESS)
         //{
@@ -106,12 +161,16 @@ void Window::resize(int width, int height)
     glLoadIdentity();
 
     //カメラ画角
-    gluPerspective(30.0, 1.0, 1.0, 30000.0);
+    gluPerspective(45.0, 1.0, 1.0, 30000.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     //カメラ座標、カメラ角度
-    //double cameraPos[3] = {m_wheelPosFR[0] - m_cameraParam.posWidth, m_wheelPosFR[1] - m_cameraParam.posDepth, m_cameraParam.posHeight};
-    double cameraPos[3] = {0, -10000, 0};
+
+    gluLookAt(
+        m_cameraPos[0], m_cameraPos[1], m_cameraPos[2],
+        m_cameraDir[0], m_cameraDir[1], m_cameraDir[2],
+        m_cameraUpward[0], m_cameraUpward[1], m_cameraUpward[2]
+    );
 }

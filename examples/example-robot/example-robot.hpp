@@ -12,6 +12,9 @@ public:
     //void glInit(void);
     void display(void);
 
+    //! 描画
+    void drawBlocks(void);
+
     //! コールバック関数
     void keyboard(int key, int scancode, int action, int mods);
     void resize(int width, int height);

@@ -22,7 +22,6 @@ int WindowBase::init(int width, int height, char* windowName)
     if (glfwInit() == GL_FALSE)
     {
         //初期化失敗
-        //printf("GLFW initialize error\n");
         return -1;
     }
 
@@ -35,7 +34,6 @@ int WindowBase::init(int width, int height, char* windowName)
     glfwWindow = glfwCreateWindow(width, height, windowName, NULL, NULL);
     if (glfwWindow == NULL)
     {
-        //printf("GLFW create window error\n");
         return -2;
     }
 
@@ -53,7 +51,6 @@ int WindowBase::init(int width, int height, char* windowName)
     if (glewInit() != GLEW_OK)
     {
         //初期化失敗
-        //printf("GLEW initialize error\n");
         return -3;
     }
 
@@ -70,6 +67,17 @@ void WindowBase::glInit(void)
     //αの有効化
     //glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA , GL_ONE);
+
+    //カメラパラメタ設定
+    m_cameraPos[0] = 0;
+    m_cameraPos[1] = -3000;
+    m_cameraPos[2] = 500;
+    m_cameraDir[0] = 0;
+    m_cameraDir[1] = 0;
+    m_cameraDir[2] = 0;
+    m_cameraUpward[0] = 0;
+    m_cameraUpward[1] = 0;
+    m_cameraUpward[2] = 1;
 }
 
 //! ウィンドウ存在確認
@@ -192,7 +200,6 @@ void WindowBase::drawSolidCube(float size)
 //! keyboard callback
 void WindowBase::keyboard(int key, int scancode, int action, int mods)
 {
-    //printf("keyboard\n");
     static bool shiftPressed = false;
     switch (key)
     {
@@ -205,17 +212,26 @@ void WindowBase::keyboard(int key, int scancode, int action, int mods)
         if (action == GLFW_PRESS) shiftPressed = true;
         else if (action == GLFW_RELEASE) shiftPressed = false;
         break;
-    case 86:    //'v'
-        //ウィンドウ表示切り替え
-        //非表示にするとキーコールバックが行われなくなるので実質非表示のみ
-        if (action == GLFW_PRESS)
-        {
-            int visible = glfwGetWindowAttrib(glfwWindow, GLFW_VISIBLE);
-            if (visible)
-                glfwHideWindow(glfwWindow);
-            else
-                glfwShowWindow(glfwWindow);
-        }
+    case 88:    //'x'
+        if(shiftPressed) m_cameraPos[0] += 50;
+        else m_cameraPos[0] -= 50;
+        break;
+    case 89:    //'y'
+        if(shiftPressed) m_cameraPos[1] += 50;
+        else m_cameraPos[1] -= 50;
+        break;
+
+    //case 86:    //'v'
+    //    //ウィンドウ表示切り替え
+    //    //非表示にするとキーコールバックが行われなくなるので実質非表示のみ
+    //    if (action == GLFW_PRESS)
+    //    {
+    //        int visible = glfwGetWindowAttrib(glfwWindow, GLFW_VISIBLE);
+    //        if (visible)
+    //            glfwHideWindow(glfwWindow);
+    //        else
+    //            glfwShowWindow(glfwWindow);
+    //    }
     default: break;
     }
 }
@@ -229,7 +245,6 @@ void WindowBase::mouseScroll(double x, double y)
 //! resize callback
 void WindowBase::resize(int width, int height)
 {
-    //printf("resize\n");
     glViewport(0, 0, width, height);
     glLoadIdentity();
     gluPerspective(30.0, 1.0, 1.0, 10.0);

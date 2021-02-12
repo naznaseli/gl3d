@@ -1,14 +1,15 @@
-#include <stdio.h>
 #include "example-robot.hpp"
 
 int main(int argc, char** argv)
 {
-    printf("example-robot\n");
-
     Window window;
 
-    while(1)
+    //ウィンドウサイズ、名前指定
+    window.init(1920, 1080, (char*)"example-robot");
+
+    while(window.isExist())
     {
+        //描画
         window.run();
     }
 
