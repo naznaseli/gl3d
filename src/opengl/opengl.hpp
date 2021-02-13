@@ -37,7 +37,7 @@ public:
     static void windowSizeCallback(GLFWwindow* window, int width, int height);
 
 protected:
-    GLFWwindow* glfwWindow;
+    GLFWwindow* m_glfwWindow;
     unsigned int m_windowWidth, m_windowHeight;
     double m_cameraPos[3];
     double m_cameraDir[3];

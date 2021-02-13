@@ -31,22 +31,22 @@ int WindowBase::init(int width, int height, char* windowName)
     //ウィンドウ非表示
     //glfwWindowHint(GLFW_VISIBLE, 0);
 
-    glfwWindow = glfwCreateWindow(width, height, windowName, NULL, NULL);
-    if (glfwWindow == NULL)
+    m_glfwWindow = glfwCreateWindow(width, height, windowName, NULL, NULL);
+    if (m_glfwWindow == NULL)
     {
         return -2;
     }
 
     //静的メンバ関数をコールバックに登録
-    glfwSetWindowUserPointer(glfwWindow, this);
-    glfwSetKeyCallback(glfwWindow, keyCallback);
-    glfwSetWindowSizeCallback(glfwWindow, windowSizeCallback);
-    glfwSetMouseButtonCallback(glfwWindow, mouseButtonCallback);
-    glfwSetScrollCallback(glfwWindow, scrollCallback);
-    glfwSetCursorPosCallback(glfwWindow, cursorPosCallback);
+    glfwSetWindowUserPointer(m_glfwWindow, this);
+    glfwSetKeyCallback(m_glfwWindow, keyCallback);
+    glfwSetWindowSizeCallback(m_glfwWindow, windowSizeCallback);
+    glfwSetMouseButtonCallback(m_glfwWindow, mouseButtonCallback);
+    glfwSetScrollCallback(m_glfwWindow, scrollCallback);
+    glfwSetCursorPosCallback(m_glfwWindow, cursorPosCallback);
 
     //ウィンドウを処理対象にする
-    glfwMakeContextCurrent(glfwWindow); //GLEW初期化より前
+    glfwMakeContextCurrent(m_glfwWindow); //GLEW初期化より前
     glfwSwapInterval(1);
 
     //GLEWの初期化
@@ -88,12 +88,12 @@ void WindowBase::glInit(void)
 //!     true:存在、false:消えてる
 bool WindowBase::isExist(void)
 {
-    return !(glfwWindowShouldClose(glfwWindow));
+    return !(glfwWindowShouldClose(m_glfwWindow));
 }
 
 void WindowBase::run(void)
 {
-    glfwMakeContextCurrent(glfwWindow);
+    glfwMakeContextCurrent(m_glfwWindow);
     glfwSwapInterval(1);
 
     //画面消去
@@ -103,7 +103,7 @@ void WindowBase::run(void)
     display();
 
     //バッファ入れ替え
-    glfwSwapBuffers(glfwWindow);
+    glfwSwapBuffers(m_glfwWindow);
 
     //イベント
     //glfwWaitEvents(); //イベント待ち続ける
@@ -136,7 +136,7 @@ void WindowBase::keyboard(int key, int scancode, int action, int mods)
     switch (key)
     {
     case 256:   //'ESC'
-        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+        glfwSetWindowShouldClose(m_glfwWindow, GLFW_TRUE);
         break;
     case 340:   //ShiftL
         //fall through

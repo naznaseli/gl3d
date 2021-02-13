@@ -158,7 +158,7 @@ void Window::keyboard(int key, int scancode, int action, int mods)
     switch(key)
     {
     case 256:   //'ESC'
-        glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+        glfwSetWindowShouldClose(m_glfwWindow, GLFW_TRUE);
         break;
     case 340:   //ShiftL
         //fall through
