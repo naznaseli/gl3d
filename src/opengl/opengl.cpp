@@ -1,5 +1,5 @@
 #include "opengl.hpp"
-//#include <stdio.h>
+#include <stdio.h>
 
 WindowBase::WindowBase()
 {
@@ -26,8 +26,8 @@ int WindowBase::init(int width, int height, char* windowName)
     }
 
     //GLFWバージョン3.2
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     //ウィンドウ非表示
     //glfwWindowHint(GLFW_VISIBLE, 0);
 
@@ -41,6 +41,9 @@ int WindowBase::init(int width, int height, char* windowName)
     glfwSetWindowUserPointer(glfwWindow, this);
     glfwSetKeyCallback(glfwWindow, keyCallback);
     glfwSetWindowSizeCallback(glfwWindow, windowSizeCallback);
+    glfwSetMouseButtonCallback(glfwWindow, mouseButtonCallback);
+    glfwSetScrollCallback(glfwWindow, scrollCallback);
+    glfwSetCursorPosCallback(glfwWindow, cursorPosCallback);
 
     //ウィンドウを処理対象にする
     glfwMakeContextCurrent(glfwWindow); //GLEW初期化より前
@@ -73,8 +76,8 @@ void WindowBase::glInit(void)
     m_cameraPos[1] = -3000;
     m_cameraPos[2] = 1000;
     m_cameraDir[0] = 0;
-    m_cameraDir[1] = 0;
-    m_cameraDir[2] = 0;
+    m_cameraDir[1] = 3000;
+    m_cameraDir[2] = -500;
     m_cameraUpward[0] = 0;
     m_cameraUpward[1] = 0;
     m_cameraUpward[2] = 1;
@@ -149,7 +152,6 @@ void WindowBase::keyboard(int key, int scancode, int action, int mods)
         if(shiftPressed) m_cameraPos[1] += 50;
         else m_cameraPos[1] -= 50;
         break;
-
     //case 86:    //'v'
     //    //ウィンドウ表示切り替え
     //    //非表示にするとキーコールバックが行われなくなるので実質非表示のみ
@@ -166,8 +168,23 @@ void WindowBase::keyboard(int key, int scancode, int action, int mods)
 }
 
 //! maouse callback
+void WindowBase::mouseCursorPos(double x, double y)
+{
+    //printf("x:%lf\n", x);
+    //printf("y:%lf\n", y);
+}
+
+void WindowBase::mouseButton(int button, int action, int mods)
+{
+    //printf("button:%d\n", button);
+    //printf("action:%d\n", action);
+    //printf("mods:%d\n", mods);
+}
+
 void WindowBase::mouseScroll(double x, double y)
 {
+    //printf("x:%lf\n", x);
+    //printf("y:%lf\n", y);
 
 }
 
@@ -182,8 +199,6 @@ void WindowBase::resize(int width, int height)
 //! static keyboard callback
 void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    //printf("skeyboard\n");
-
     //ポインタからクラスのインスタンスを取得
     WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
 
@@ -192,20 +207,42 @@ void WindowBase::keyCallback(GLFWwindow* window, int key, int scancode, int acti
 }
 
 //! static mouse callback
-void WindowBase::mouseScrollCallback(GLFWwindow* window, double x, double y)
+//座標がずれるたびにコールバック
+void WindowBase::cursorPosCallback(GLFWwindow* window, double x, double y)
 {
+    //ポインタからクラスのインスタンスを取得
+    WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
 
+    //本物のコールバック関数を呼び出し
+    windowBase->mouseCursorPos(x, y);
+}
+
+//マウスのボタンが押される、離れるたびにコールバック
+void WindowBase::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    //ポインタからクラスのインスタンスを取得
+    WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
+
+    //本物のコールバック関数を呼び出し
+    windowBase->mouseButton(button, action, mods);
+}
+
+//ホイールをスクロールするたびにコールバック
+void WindowBase::scrollCallback(GLFWwindow* window, double x, double y)
+{
+    //ポインタからクラスのインスタンスを取得
+    WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
+
+    //本物のコールバック関数を呼び出し
+    windowBase->mouseScroll(x, y);
 }
 
 //! static resize callback
 void WindowBase::windowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    //printf("sresize\n");
-
     //ポインタからクラスのインスタンスを取得
     WindowBase* windowBase = static_cast<WindowBase*>(glfwGetWindowUserPointer(window));
 
     //本物のコールバック関数を呼び出し
     windowBase->resize(width, height);
-
 }

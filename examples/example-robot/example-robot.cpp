@@ -4,7 +4,6 @@
 
 Window::Window()
 {
-
 }
 
 Window::~Window()
@@ -16,83 +15,109 @@ void Window::display(void)
 {
     resize(m_windowWidth, m_windowHeight);
 
+    glPushMatrix(); //世界のプッシュ
+    glTranslated(worldX, worldY, worldZ);
+
     gl::draw3Axis(0, 0, 0);
 
     //床
-    if(1)
+    if(m_displayFloor)
     {
-        glColor3d(0.6, 0.6, 0.6);
-        glPushMatrix();
-        glTranslated(0, 0, -500);
-        gl::drawSolidCube(1000);
-        glPopMatrix();
+        double BoxSize = 500;
+        int BoxNum = 10;
+        for(int i = 0; i < BoxNum; i++)
+        {
+            for(int j = 0; j < BoxNum; j++)
+            {
+                if((i + j) % 2 == 0) glColor3d(0.6, 0.6, 0.6);
+                else glColor3d(0.3, 0.3, 0.3);
+                glPushMatrix();
+                glTranslated((j - BoxNum/2) * BoxSize, (i - BoxNum/2) * BoxSize, 0);
+                glTranslated(BoxSize/2, BoxSize/2, -BoxSize/2);
+                gl::drawSolidCube(BoxSize);
+                glPopMatrix();
+            }
+        }
     }
 
     //胴体
     glColor3d(0.0, 0.0, 1.0);
     glPushMatrix();
     glTranslated(0, 0, 750);
-    gl::drawSolidRectangular(200, 100, 500);
+    if(m_displayMode == Solid) gl::drawSolidRectangular(400, 150, 500);
+    else if(m_displayMode == Wire) gl::drawWireRectangular(400, 150, 500);
 
     //頭
     glColor3d(0.0, 1.0, 0.0);
     glPushMatrix();
     glTranslated(0, 0, 250);
-    glRotated(30, 1.0, 0.0, 0.0);   //+:うなずく
-    gl::drawSolidRectangular2(80, 80, 120);
+    glRotated(neckAngleX, 1.0, 0.0, 0.0);
+    glRotated(neckAngleY, 0.0, 1.0, 0.0);
+    glRotated(neckAngleZ, 0.0, 0.0, 1.0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(150, 150, 150);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(150, 150, 150);
     glPopMatrix();
 
     //左腕
-    glColor3d(0.0, 1.0, 1.0);   //水色
+    glColor3d(1.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslated(150, 0, 250);
-    glRotated(180 - 30, 1, 0, 0);   //-:腕前から挙げる
-    gl::drawSolidRectangular2(80, 80, 200);
+    glTranslated(200 + 60, 0, 200);
+    glRotated(180 - shoulderAngleL, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     //左手
-    glColor3d(1.0, 0.0, 0.0);   //赤
-    glTranslated(0, 0, 200);
-    glRotated(-30, 1, 0, 0);
-    gl::drawSolidRectangular2(80, 80, 200);
+    glColor3d(1.0, 0.0, 0.0);
+    glTranslated(0, 0, 300);
+    glRotated(-elbowAngleL, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     glPopMatrix();  //左腕
 
     //右腕
     glColor3d(1.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslated(-150, 0, 250);
-    glRotated(180 - 30, 1, 0, 0);   //-:腕前から挙げる
-    gl::drawSolidRectangular2(80, 80, 200);
+    glTranslated(-200 - 60, 0, 200);
+    glRotated(180 - shoulderAngleR, 1, 0, 0);   //-:腕前から挙げる
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     //右手
-    glTranslated(0, 0, 200);
-    glRotated(-30, 1, 0, 0);
-    gl::drawSolidRectangular2(80, 80, 200);
+    glTranslated(0, 0, 300);
+    glRotated(-elbowAngleR, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     glPopMatrix();
 
     //左大腿
-    glColor3d(1.0, 0.0, 1.0);
-    glPushMatrix();
-    glTranslated(70, 0, -250);
-    glRotated(180 - 30, 1, 0, 0);
-    gl::drawSolidRectangular2(100, 100, 250);
-    //左足
     glColor3d(1.0, 1.0, 0.0);
+    glPushMatrix();
+    glTranslated(100, 0, -250);
+    glRotated(180 - hipAngleL, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
+    //左足
     glTranslated(0, 0, 250);
-    glRotated(30, 1, 0, 0);
-    gl::drawSolidRectangular2(100, 100, 250);
+    glRotated(kneeAngleL, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
     glPopMatrix();
 
     //右大腿
     glColor3d(1.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslated(-70, 0, -250);
-    glRotated(180 - 0, 1, 0, 0);
-    gl::drawSolidRectangular2(100, 100, 250);
+    glTranslated(-100, 0, -250);
+    glRotated(180 - hipAngleR, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
     //右足
     glTranslated(0, 0, 250);
-    glRotated(0, 1, 0, 0);
-    gl::drawSolidRectangular2(100, 100, 250);
+    glRotated(kneeAngleR, 1, 0, 0);
+    if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
+    else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
     glPopMatrix();
 
     glPopMatrix();  //胴体
+
+    glPopMatrix();  //世界のプッシュ
 
     glFlush();
 }
@@ -129,7 +154,8 @@ void Window::drawBlocks(void)
 void Window::keyboard(int key, int scancode, int action, int mods)
 {
     static bool shiftPressed = false;
-    switch (key)
+    //printf("%d\n", key);
+    switch(key)
     {
     case 256:   //'ESC'
         glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
@@ -140,39 +166,76 @@ void Window::keyboard(int key, int scancode, int action, int mods)
         if (action == GLFW_PRESS) shiftPressed = true;
         else if (action == GLFW_RELEASE) shiftPressed = false;
         break;
-    case 88:    //'x'
-        if(shiftPressed) m_cameraPos[0] += 500;
-        else m_cameraPos[0] -= 500;
-        break;
-    case 89:    //'y'
-        if(shiftPressed) m_cameraPos[1] += 500;
-        else m_cameraPos[1] -= 500;
-        break;
-    case 90:    //'z'
-        if(shiftPressed) m_cameraPos[2] += 500;
-        else m_cameraPos[2] -= 500;
-        break;
-    case 87:    //'w'
-        //if (action == GLFW_PRESS)
-        //{
-        //    //アスペクト比変更
-        //    if (displayParam.aspectRatio == STANDARD) displayParam.aspectRatio = WIDE;
-        //    else displayParam.aspectRatio = STANDARD;
-        //}
-        break;
-    case 86:    //'v'
-        //ウィンドウ表示切り替え
-        //非表示にするとキーコールバックが行われなくなるので実質非表示のみ
-        if (action == GLFW_PRESS)
-        {
-            int visible = glfwGetWindowAttrib(glfwWindow, GLFW_VISIBLE);
-            if (visible)
-                glfwHideWindow(glfwWindow);
-            else
-                glfwShowWindow(glfwWindow);
-        }
     default: break;
     }
+
+    if(action == GLFW_PRESS || action == GLFW_REPEAT)
+    {
+        switch(key)
+        {
+        case 88:    //'x'
+            if(!shiftPressed) worldX += 500;
+            else worldX -= 500;
+            break;
+        case 89:    //'y'
+            if(!shiftPressed) worldY += 500;
+            else worldY -= 500;
+            break;
+        case 90:    //'z'
+            if(!shiftPressed) worldZ += 500;
+            else worldZ -= 500;
+            break;
+        case 48:    //'0'
+            if(!shiftPressed) neckAngleX += 5;
+            else neckAngleX -= 5;
+            break;
+        case 49:    //'1'
+            if(!shiftPressed) shoulderAngleL += 5;
+            else shoulderAngleL -= 5;
+            break;
+        case 50:    //'2'
+            if(!shiftPressed) elbowAngleL += 5;
+            else elbowAngleL -= 5;
+            break;
+        case 51:    //'3'
+            if(!shiftPressed) shoulderAngleR += 5;
+            else shoulderAngleR -= 5;
+            break;
+        case 52:    //'4'
+            if(!shiftPressed) elbowAngleR += 5;
+            else elbowAngleR -= 5;
+            break;
+        case 53:    //'5'
+            if(!shiftPressed) hipAngleL += 5;
+            else hipAngleL -= 5;
+            break;
+        case 54:    //'6'
+            if(!shiftPressed) kneeAngleL += 5;
+            else kneeAngleL -= 5;
+            break;
+        case 55:    //'7'
+            if(!shiftPressed) hipAngleR += 5;
+            else hipAngleR -= 5;
+            break;
+        case 56:    //'8'
+            if(!shiftPressed) kneeAngleR += 5;
+            else kneeAngleR -= 5;
+            break;
+        case 84:    //'t': 表示モード切り替え
+            m_displayMode = (DisplayMode)(((int)m_displayMode + 1) % DisplayMode::Size);
+            break;
+        case 86:    //'v': 床表示非表示切り替え
+            m_displayFloor = !m_displayFloor;
+            break;
+        case 87:    //'w'
+            //カメラシフト
+            m_cameraPos[0] += 50;
+            break;
+        default: break;
+        }
+    }
+
+    //値制限
 }
 
 void Window::resize(int width, int height)
@@ -189,7 +252,8 @@ void Window::resize(int width, int height)
     glLoadIdentity();
 
     //カメラ画角
-    gluPerspective(45.0, 1.0, 1.0, 30000.0);
+    //gluPerspective(30.0, 1.0, 1.0, 30000.0);
+    gluPerspective(30.0, 1920.0/1080.0, 1.0, 30000.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -198,7 +262,7 @@ void Window::resize(int width, int height)
 
     gluLookAt(
         m_cameraPos[0], m_cameraPos[1], m_cameraPos[2],
-        m_cameraDir[0], m_cameraDir[1], m_cameraDir[2],
+        m_cameraPos[0] + m_cameraDir[0], m_cameraPos[1] + m_cameraDir[1], m_cameraPos[2] + m_cameraDir[2],
         m_cameraUpward[0], m_cameraUpward[1], m_cameraUpward[2]
     );
 }

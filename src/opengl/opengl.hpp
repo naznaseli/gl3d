@@ -23,8 +23,8 @@ public:
 
     //! コールバック
     virtual void keyboard(int key, int scancode, int action, int mods);
-    //virtual void mouseButton();
-    //virtual void mouseCursor();
+    virtual void mouseButton(int button, int action, int mods);
+    virtual void mouseCursorPos(double x, double y);
     virtual void mouseScroll(double x, double y);
     virtual void resize(int width, int height);
 
@@ -32,8 +32,8 @@ public:
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void charCallback(GLFWwindow* window, unsigned int charInfo);
     static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-    static void mousePosCallback(GLFWwindow* window, double x, double y);
-    static void mouseScrollCallback(GLFWwindow* window, double x, double y);
+    static void cursorPosCallback(GLFWwindow* window, double x, double y);
+    static void scrollCallback(GLFWwindow* window, double x, double y);
     static void windowSizeCallback(GLFWwindow* window, int width, int height);
 
 protected:

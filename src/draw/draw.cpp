@@ -162,4 +162,86 @@ void drawSolidRectangular2(double x, double y, double z)
 
 }
 
+void drawWireRectangular(double x, double y, double z)
+{
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, y / 2, z / 2);
+    glVertex3d(-x / 2, y / 2, z / 2);
+    glVertex3d(-x / 2, -y / 2, z / 2);
+    glVertex3d(x / 2, -y / 2, z / 2);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, -y / 2, -z / 2);
+    glVertex3d(-x / 2, -y / 2, -z / 2);
+    glVertex3d(-x / 2, y / 2, -z / 2);
+    glVertex3d(x / 2, y / 2, -z / 2);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, y / 2, z / 2);
+    glVertex3d(x / 2, -y / 2, z / 2);
+    glVertex3d(x / 2, -y / 2, -z / 2);
+    glVertex3d(x / 2, y / 2, -z / 2);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(-x / 2, y / 2, -z / 2);
+    glVertex3d(-x / 2, -y / 2, -z / 2);
+    glVertex3d(-x / 2, -y / 2, z / 2);
+    glVertex3d(-x / 2, y / 2, z / 2);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, y / 2, z / 2);
+    glVertex3d(x / 2, y / 2, -z / 2);
+    glVertex3d(-x / 2, y / 2, -z / 2);
+    glVertex3d(-x / 2, y / 2, z / 2);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(-x / 2, -y / 2, z / 2);
+    glVertex3d(-x / 2, -y / 2, -z / 2);
+    glVertex3d(x / 2, -y / 2, -z / 2);
+    glVertex3d(x / 2, -y / 2, z / 2);
+    glEnd();
+
+}
+
+void drawWireRectangular2(double x, double y, double z)
+{
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, y / 2, 0);
+    glVertex3d(-x / 2, y / 2, 0);
+    glVertex3d(-x / 2, -y / 2, 0);
+    glVertex3d(x / 2, -y / 2, 0);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, -y / 2, z);
+    glVertex3d(-x / 2, -y / 2, z);
+    glVertex3d(-x / 2, y / 2, z);
+    glVertex3d(x / 2, y / 2, z);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, y / 2, 0);
+    glVertex3d(x / 2, -y / 2, 0);
+    glVertex3d(x / 2, -y / 2, z);
+    glVertex3d(x / 2, y / 2, z);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(-x / 2, y / 2, z);
+    glVertex3d(-x / 2, -y / 2, z);
+    glVertex3d(-x / 2, -y / 2, 0);
+    glVertex3d(-x / 2, y / 2, 0);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(x / 2, y / 2, 0);
+    glVertex3d(x / 2, y / 2, z);
+    glVertex3d(-x / 2, y / 2, z);
+    glVertex3d(-x / 2, y / 2, 0);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(-x / 2, -y / 2, 0);
+    glVertex3d(-x / 2, -y / 2, z);
+    glVertex3d(x / 2, -y / 2, z);
+    glVertex3d(x / 2, -y / 2, 0);
+    glEnd();
+
+}
+
 }//namespace
