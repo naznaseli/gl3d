@@ -38,6 +38,6 @@ endif()
 # Tests
 if(OPTION_BUILD_TESTS)
     enable_testing()
-    set(IDE_FOLDER "Tests")
-    add_subdirectory(tests)
+    set(IDE_FOLDER "Test")
+    add_subdirectory(test)
 endif()
