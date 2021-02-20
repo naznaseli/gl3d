@@ -28,8 +28,8 @@ target_compile_options(${target}
     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
 )
 
-#target_include_directories(${target} PUBLIC ${INCLUDE_DIRECTORIES})
-#target_link_libraries(${target} PUBLIC ${LIBRARIES})
+target_include_directories(${target} PUBLIC ${INCLUDE_DIRECTORIES})
+target_link_libraries(${target} PUBLIC ${LIBRARIES})
 #target_include_directories(${target}
 #    PUBLIC
 #    #${GLFW_INCLUDE_DIRS}

@@ -1,3 +1,69 @@
+set(target opengl)
+
+set(SRCS
+    opengl.cpp
+    #opengl.hpp
+    draw.cpp
+    #draw.hpp
+)
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Fetch contents
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+include(FetchContent)
+#:**********************************************************************
+FetchContent_Declare(GLFW3
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG master
+)
+
+#FetchContent_MakeAvailable(GLFW3)
+FetchContent_GetProperties(glfw3)
+if(NOT glfw3_POPULATED)
+    FetchContent_Populate(glfw3)
+    add_subdirectory(${glfw3_SOURCE_DIR} ${glfw3_BINARY_DIR})
+endif()
+
+#:**********************************************************************
+FetchContent_Declare(GLEW
+    #GIT_REPOSITORY https://github.com/nigels-com/glew.git
+    #GIT_TAG master
+    URL https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.zip
+)
+
+#FetchContent_MakeAvailable(GLEW)
+FetchContent_GetProperties(glew)
+if(NOT glew_POPULATED)
+    FetchContent_Populate(glew)
+    add_subdirectory(${glew_SOURCE_DIR}/build/cmake ${glew_BINARY_DIR})
+endif()
+
+
+set(INCLUDE_DIRECTORIES
+    ${OpenCV_INCLUDE_DIRS}
+    #${GLFW_INCLUDE_DIRS}
+    #${GLEW_INCLUDE_DIRS}
+    ${glfw3_SOURCE_DIR}/include/
+    ${glew_SOURCE_DIR}/include/
+)
+
+set(LIBRARIES
+    ${OPENGL_LIBRARIES}
+    #${GLFW_LIBRARIES}
+    #${GLEW_LIBRARIES}
+    glfw
+    glew
+)
+
+add_library(${target} STATIC ${SRCS})
+
+target_compile_options(${target}
+    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
+    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
+)
+
+target_include_directories(${target} PUBLIC ${INCLUDE_DIRECTORIES})
+target_link_libraries(${target} PUBLIC ${LIBRARIES})
 #cmake_minimum_required(VERSION 3.10)
 
 #set(CMAKE_CXX_STANDARD 11)
@@ -52,35 +118,35 @@
 #    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
 #)
 
-include(FetchContent)
-FetchContent_Declare(GLFW3
-    GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG master
-)
-
-#FetchContent_MakeAvailable(GLFW3)
-FetchContent_GetProperties(glfw3)
-if(NOT glfw3_POPULATED)
-    FetchContent_Populate(glfw3)
-    add_subdirectory(${glfw3_SOURCE_DIR} ${glfw3_BINARY_DIR})
-endif()
-
-#:**********************************************************************
-FetchContent_Declare(GLEW
-    #GIT_REPOSITORY https://github.com/nigels-com/glew.git
-    #GIT_TAG master
-    URL https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.zip
-)
-
-#FetchContent_MakeAvailable(GLEW)
-FetchContent_GetProperties(glew)
-if(NOT glew_POPULATED)
-    FetchContent_Populate(glew)
-    add_subdirectory(${glew_SOURCE_DIR}/build/cmake ${glew_BINARY_DIR})
-endif()
+#include(FetchContent)
+#FetchContent_Declare(GLFW3
+#    GIT_REPOSITORY https://github.com/glfw/glfw.git
+#    GIT_TAG master
+#)
+#
+##FetchContent_MakeAvailable(GLFW3)
+#FetchContent_GetProperties(glfw3)
+#if(NOT glfw3_POPULATED)
+#    FetchContent_Populate(glfw3)
+#    add_subdirectory(${glfw3_SOURCE_DIR} ${glfw3_BINARY_DIR})
+#endif()
+#
+##:**********************************************************************
+#FetchContent_Declare(GLEW
+#    #GIT_REPOSITORY https://github.com/nigels-com/glew.git
+#    #GIT_TAG master
+#    URL https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.zip
+#)
+#
+##FetchContent_MakeAvailable(GLEW)
+#FetchContent_GetProperties(glew)
+#if(NOT glew_POPULATED)
+#    FetchContent_Populate(glew)
+#    add_subdirectory(${glew_SOURCE_DIR}/build/cmake ${glew_BINARY_DIR})
+#endif()
 
 #----------------------------------------------------------------------
 # Add subdirectories
 #----------------------------------------------------------------------
-add_subdirectory(opengl)
-add_subdirectory(draw)
+#add_subdirectory(opengl)
+#add_subdirectory(draw)
