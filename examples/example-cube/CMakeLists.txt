@@ -1,10 +1,10 @@
-#cmake_minimum_required(VERSION 3.10)
+#cmake_minimum_required(VERSION 3.11)
 
-#set(CMAKE_CXX_STANDARD 11)
+set(target example-cube)
 
 #if(MSVC)
 #    #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#    # include directories
+#    #+ include directories
 #    #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #    if(NOT OpenCV_FOUND)
 #        #set(OpenCV_DIR "C:/lib/opencv-4.3.0/build/install")
@@ -19,7 +19,7 @@
 #    endif()
 #
 #    #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#    # Libraries
+#    #+ libraries
 #    #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #    if(CMAKE_VS_PLATFORM_NAME MATCHES "x64")
 #        if(NOT GLFW_LIBRARIES)
@@ -47,40 +47,29 @@
 #    find_package(OpenGL REQUIRED)
 #endif()
 
+add_executable(${target} main.cpp)
+
 #target_compile_options(${target}
 #    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
 #    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
 #)
 
-include(FetchContent)
-FetchContent_Declare(GLFW3
-    GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG master
+set_target_properties(${target} PROPERTIES FOLDER "${IDE_FOLDER}")
+
+target_include_directories(${target}
+    PUBLIC
+    #${OpenCV_INCLUDE_DIRS}
+    #${GLFW_INCLUDE_DIRS}
+    #${GLEW_INCLUDE_DIRS}
+    #${PROJECT_SOURCE_DIR}/src/opengl
+    #${PROJECT_SOURCE_DIR}/src/draw
 )
 
-#FetchContent_MakeAvailable(GLFW3)
-FetchContent_GetProperties(glfw3)
-if(NOT glfw3_POPULATED)
-    FetchContent_Populate(glfw3)
-    add_subdirectory(${glfw3_SOURCE_DIR} ${glfw3_BINARY_DIR})
-endif()
-
-#:**********************************************************************
-FetchContent_Declare(GLEW
-    #GIT_REPOSITORY https://github.com/nigels-com/glew.git
-    #GIT_TAG master
-    URL https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.zip
+target_link_libraries(${target}
+    PUBLIC
+    #opengl
+    #draw
+    #${OPENGL_LIBRARIES}
+    #${GLFW_LIBRARIES}
+    #${GLEW_LIBRARIES}
 )
-
-#FetchContent_MakeAvailable(GLEW)
-FetchContent_GetProperties(glew)
-if(NOT glew_POPULATED)
-    FetchContent_Populate(glew)
-    add_subdirectory(${glew_SOURCE_DIR}/build/cmake ${glew_BINARY_DIR})
-endif()
-
-#----------------------------------------------------------------------
-# Add subdirectories
-#----------------------------------------------------------------------
-add_subdirectory(opengl)
-add_subdirectory(draw)

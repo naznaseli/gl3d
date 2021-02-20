@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.11)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
@@ -27,5 +27,6 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 
 # Now simply link against gtest or gtest_main as needed. Eg
 add_executable(example example.cpp)
+set_target_properties(${target} PROPERTIES FOLDER "${IDE_FOLDER}")
 target_link_libraries(example gtest_main)
 add_test(NAME example_test COMMAND example)
