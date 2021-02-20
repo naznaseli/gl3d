@@ -16,18 +16,11 @@ target_compile_options(${target}
 set_target_properties(${target} PROPERTIES FOLDER "${IDE_FOLDER}")
 
 target_include_directories(${target}
-    PUBLIC
-    #${OpenCV_INCLUDE_DIRS}
-    #${GLFW_INCLUDE_DIRS}
-    #${GLEW_INCLUDE_DIRS}
-    ${PROJECT_SOURCE_DIR}/src/
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src
 )
 
 target_link_libraries(${target}
-    PUBLIC
+    PRIVATE
     opengl
-    #draw
-    #${OPENGL_LIBRARIES}
-    #${GLFW_LIBRARIES}
-    #${GLEW_LIBRARIES}
 )
