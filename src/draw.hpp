@@ -2,11 +2,11 @@
 
 namespace gl
 {
-void draw3Axis(double xPos, double yPos, double zPos);
-void drawSolidCube(double size);
-void drawSolidRectangular(double x, double y, double z);
-void drawSolidRectangular2(double x, double y, double z);
-void drawWireRectangular(double x, double y, double z);
-void drawWireRectangular2(double x, double y, double z);
+void draw3Axis(float xPos, float yPos, float zPos);
+void drawSolidCube(float size);
+void drawSolidRectangular(float x, float y, float z);
+void drawSolidRectangular2(float x, float y, float z);
+void drawWireRectangular(float x, float y, float z);
+void drawWireRectangular2(float x, float y, float z);
 
 }//namespace

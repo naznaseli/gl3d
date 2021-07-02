@@ -1,7 +1,3 @@
-#cmake_minimum_required(VERSION 3.11)
-
-#----------------------------------------------------------------------
-# Add subdirectories
-#----------------------------------------------------------------------
+add_subdirectory(example-2d)
+add_subdirectory(example-3d)
 add_subdirectory(example-robot)
-add_subdirectory(example-cube)

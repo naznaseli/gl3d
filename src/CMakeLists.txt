@@ -1,34 +1,34 @@
-set(target opengl)
+set(TARGET libopengl)
 
-set(SRCS
+set(SOURCES
     opengl.cpp
     draw.cpp
 )
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-# ローカルから検索
+# ローカルで検索
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-#if(UNIX)
-#    find_package(glfw3 REQUIRED)
-#    find_package(glew REQUIRED)
-#    find_package(OpenGL REQUIRED)
-#else()
-#    #find_package(glfw3 REQUIRED PATHS "C:/lib/glfw-3.3.2/")
-#    set(GLFW_INCLUDE_DIRS "C:/lib/glfw/include")
-#    set(GLEW_INCLUDE_DIRS "C:/lib/glew/include")
-#    set(OPENGL_LIBRARIES "opengl32;glu32")
-#    if(CMAKE_VS_PLATFORM_NAME MATCHES "x64")
-#        set(GLFW_LIBRARIES "C:/lib/glfw/x64/lib/glfw3.lib")
-#        set(GLFW_FOUND TRUE)
-#        set(GLEW_LIBRARIES "C:/lib/glew/x64/lib/glew32.lib")
-#        set(GLEW_FOUND TRUE)
-#    else()
-#        set(GLFW_LIBRARIES "C:/lib/glfw/x86/lib/glfw3.lib")
-#        set(GLFW_FOUND TRUE)
-#        set(GLEW_LIBRARIES "C:/lib/glew/x86/lib/glew32.lib")
-#        set(GLEW_FOUND TRUE)
-#    endif()
-#endif()
+if(UNIX)
+    find_package(glfw3)
+    find_package(glew)
+    find_package(OpenGL)
+else()
+    ##パス指定
+    #set(GLFW_INCLUDE_DIRS "C:/lib/glfw/include")
+    #set(GLEW_INCLUDE_DIRS "C:/lib/glew/include")
+    #set(OPENGL_LIBRARIES "opengl32;glu32")
+    #if(CMAKE_VS_PLATFORM_NAME MATCHES "x64")
+    #    set(GLFW_LIBRARIES "C:/lib/glfw/x64/lib/glfw3.lib")
+    #    set(GLFW_FOUND TRUE)
+    #    set(GLEW_LIBRARIES "C:/lib/glew/x64/lib/glew32.lib")
+    #    set(GLEW_FOUND TRUE)
+    #else()
+    #    set(GLFW_LIBRARIES "C:/lib/glfw/x86/lib/glfw3.lib")
+    #    set(GLFW_FOUND TRUE)
+    #    set(GLEW_LIBRARIES "C:/lib/glew/x86/lib/glew32.lib")
+    #    set(GLEW_FOUND TRUE)
+    #endif()
+endif()
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # リモートから取得
@@ -85,19 +85,21 @@ set(LIBRARIES
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # Add libraries
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-add_library(${target} STATIC ${SRCS})
+add_library(${TARGET} STATIC ${SOURCES})
 
-target_compile_options(${target}
-    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
-)
+if(MSVC)
+    target_compile_options(${TARGET}
+        PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
+        PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
+    )
+endif()
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # Include Directories
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-target_include_directories(${target} PUBLIC ${INCLUDE_DIRECTORIES})
+target_include_directories(${TARGET} PUBLIC ${INCLUDE_DIRECTORIES})
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # Link libraries
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-target_link_libraries(${target} PUBLIC ${LIBRARIES})
+target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})

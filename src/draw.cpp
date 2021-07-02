@@ -7,10 +7,10 @@ namespace gl
 {
 
 //! 座標軸を描く
-void draw3Axis(double xPos, double yPos, double zPos)
+void draw3Axis(float xPos, float yPos, float zPos)
 {
     //先の長さ
-    double distance = 100.0;
+    float distance = 100.0;
     //線の太さ
     glLineWidth(3);
 
@@ -38,8 +38,8 @@ void draw3Axis(double xPos, double yPos, double zPos)
 
 //! 直方体描画
 //! @param in
-//!     double size:    一辺の長さ
-void drawSolidCube(double size)
+//!     float size:    一辺の長さ
+void drawSolidCube(float size)
 {
     glBegin(GL_QUADS);
     glVertex3d(size / 2, size / 2, size / 2);
@@ -80,7 +80,7 @@ void drawSolidCube(double size)
 }
 
 //! xyz原点を中心に直方体を描く
-void drawSolidRectangular(double x, double y, double z)
+void drawSolidRectangular(float x, float y, float z)
 {
     glBegin(GL_QUADS);
     glVertex3d(x / 2, y / 2, z / 2);
@@ -121,7 +121,7 @@ void drawSolidRectangular(double x, double y, double z)
 }
 
 //! xy原点を中心にz方向に直方体を描く
-void drawSolidRectangular2(double x, double y, double z)
+void drawSolidRectangular2(float x, float y, float z)
 {
     glBegin(GL_QUADS);
     glVertex3d(x / 2, y / 2, 0);
@@ -162,7 +162,7 @@ void drawSolidRectangular2(double x, double y, double z)
 
 }
 
-void drawWireRectangular(double x, double y, double z)
+void drawWireRectangular(float x, float y, float z)
 {
     glBegin(GL_LINES);
     glVertex3d(x / 2, y / 2, z / 2);
@@ -203,7 +203,7 @@ void drawWireRectangular(double x, double y, double z)
 
 }
 
-void drawWireRectangular2(double x, double y, double z)
+void drawWireRectangular2(float x, float y, float z)
 {
     glBegin(GL_LINES);
     glVertex3d(x / 2, y / 2, 0);

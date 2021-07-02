@@ -11,11 +11,10 @@ class Window : public WindowBase
 {
 public:
     Window();
+    Window(int windowWidth, int windowHeight, const char* windowName, bool screenRendering);
     ~Window();
 
-    //! OpenGL
-    //int init(int width, int height, char* windowName);
-    //void glInit(void);
+    void glInit(void);
     void display(void);
 
     //! 描画

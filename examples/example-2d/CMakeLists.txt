@@ -1,12 +1,6 @@
-set(TARGET example-robot)
+set(TARGET example-2d)
 
-set(SOURCES
-    main.cpp
-    example-robot.cpp
-    example-robot.hpp
-)
-
-add_executable(${TARGET} ${SOURCES})
+add_executable(${TARGET} example-2d.cpp)
 
 if(MSVC)
     target_compile_options(${TARGET}

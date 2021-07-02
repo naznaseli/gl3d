@@ -2,39 +2,33 @@
 #include <stdio.h>
 
 WindowBase::WindowBase()
-{
-    //printf("WindowBase created\n");
-}
-
-WindowBase::~WindowBase()
-{
-    //printf("WindowBase deleted\n");
-    glfwTerminate();
-}
+: WindowBase(1920, 1080, "Window", true)
+{}
 
 //GLFW, GLEW初期化、ウィンドウ作成
-int WindowBase::init(int width, int height, char* windowName)
+WindowBase::WindowBase(int windowWidth, int windowHeight, const char* windowName, bool screenRendering)
 {
-    m_windowWidth = width;
-    m_windowHeight = height;
+    m_windowWidth = windowWidth;
+    m_windowHeight = windowHeight;
 
     //GLFW初期化
     if (glfwInit() == GL_FALSE)
     {
         //初期化失敗
-        return -1;
+        return;
     }
 
-    //GLFWバージョン3.2
+    //GLFWバージョン指定
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    //ウィンドウ非表示
-    //glfwWindowHint(GLFW_VISIBLE, 0);
 
-    m_glfwWindow = glfwCreateWindow(width, height, windowName, NULL, NULL);
+    //中間ウィンドウ非表示
+    setScreenRendering(screenRendering);
+
+    m_glfwWindow = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
     if (m_glfwWindow == NULL)
     {
-        return -2;
+        return;
     }
 
     //静的メンバ関数をコールバックに登録
@@ -54,12 +48,23 @@ int WindowBase::init(int width, int height, char* windowName)
     if (glewInit() != GLEW_OK)
     {
         //初期化失敗
-        return -3;
+        return;
     }
 
-    glInit();
+    return;
+}
 
-    return 0;
+WindowBase::~WindowBase()
+{
+    //printf("WindowBase deleted\n");
+    glfwTerminate();
+}
+
+//! スクリーンレンダリングありなし
+void WindowBase::setScreenRendering(bool rendering)
+{
+    if(rendering) glfwWindowHint(GLFW_VISIBLE, 1);
+    else glfwWindowHint(GLFW_VISIBLE, 0);
 }
 
 //! 描画の初期化
@@ -70,17 +75,6 @@ void WindowBase::glInit(void)
     //αの有効化
     //glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA , GL_ONE);
-
-    //カメラパラメタ設定
-    m_cameraPos[0] = 0;
-    m_cameraPos[1] = -3000;
-    m_cameraPos[2] = 1000;
-    m_cameraDir[0] = 0;
-    m_cameraDir[1] = 3000;
-    m_cameraDir[2] = -500;
-    m_cameraUpward[0] = 0;
-    m_cameraUpward[1] = 0;
-    m_cameraUpward[2] = 1;
 }
 
 //! ウィンドウ存在確認
@@ -113,6 +107,7 @@ void WindowBase::run(void)
 //! 描画
 void WindowBase::display(void)
 {
+    resize(m_windowWidth, m_windowHeight);
     glBegin(GL_POLYGON);
     glColor3d(1.0, 0.0, 0.0);
     glVertex2d(-0.9, -0.9);
@@ -127,7 +122,35 @@ void WindowBase::display(void)
     glFlush();
 }
 
+//! 座標軸を描く
+void WindowBase::draw3Axis(float xPos, float yPos, float zPos)
+{
+    //先の長さ
+    float distance = 100.0;
+    //線の太さ
+    glLineWidth(3);
 
+    //X軸描画
+    glColor3f(1.0, 0.0, 0.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(xPos, yPos, zPos);
+    glVertex3d(xPos + distance, yPos, zPos);
+    glEnd();
+
+    //Y軸描画
+    glColor3f(0.0, 1.0, 0.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(xPos, yPos, zPos);
+    glVertex3d(xPos, yPos + distance, zPos);
+    glEnd();
+
+    //Z軸描画
+    glColor3f(0.0, 0.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(xPos, yPos, zPos);
+    glVertex3d(xPos, yPos, zPos + distance);
+    glEnd();
+}
 
 //! keyboard callback
 void WindowBase::keyboard(int key, int scancode, int action, int mods)
@@ -191,9 +214,10 @@ void WindowBase::mouseScroll(double x, double y)
 //! resize callback
 void WindowBase::resize(int width, int height)
 {
+    m_windowWidth = width;
+    m_windowHeight = height;
+
     glViewport(0, 0, width, height);
-    glLoadIdentity();
-    gluPerspective(30.0, 1.0, 1.0, 10.0);
 }
 
 //! static keyboard callback
