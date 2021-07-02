@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <windows.h>
 #include "opengl.hpp"
 
 class Window : public WindowBase
