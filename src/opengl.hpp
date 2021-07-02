@@ -7,8 +7,9 @@ class WindowBase
 {
 public:
     WindowBase();
+    WindowBase(int width, int height, const char* windowName, bool screenRendering);
     virtual ~WindowBase();
-    virtual int init(int width, int height, char* windowName);
+    void setScreenRendering(bool rendering);
 
     bool isExist(void);
     void run(void);

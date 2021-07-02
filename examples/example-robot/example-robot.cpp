@@ -2,13 +2,32 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-Window::Window()
-{
-}
+Window::Window(int windowWidth, int windowHeight, const char* windowName, bool screenRendering)
+: WindowBase(windowWidth, windowHeight, windowName, screenRendering)
+{}
 
 Window::~Window()
 {
     glfwTerminate();
+}
+
+void Window::glInit(void)
+{
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    //αの有効化
+    //glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA , GL_ONE);
+
+    m_cameraPos[0] = 0;
+    m_cameraPos[1] = -3000;
+    m_cameraPos[2] = 1000;
+    m_cameraDir[0] = 0;
+    m_cameraDir[1] = 0;
+    m_cameraDir[2] = 500;
+    m_cameraUpward[0] = 0;
+    m_cameraUpward[1] = 0;
+    m_cameraUpward[2] = 1;
 }
 
 void Window::display(void)
@@ -16,24 +35,24 @@ void Window::display(void)
     resize(m_windowWidth, m_windowHeight);
 
     glPushMatrix(); //世界のプッシュ
-    glTranslated(worldX, worldY, worldZ);
+    glTranslatef((float)worldX, (float)worldY, (float)worldZ);
 
     gl::draw3Axis(0, 0, 0);
 
     //床
     if(m_displayFloor)
     {
-        double BoxSize = 500;
+        float BoxSize = 500;
         int BoxNum = 10;
         for(int i = 0; i < BoxNum; i++)
         {
             for(int j = 0; j < BoxNum; j++)
             {
-                if((i + j) % 2 == 0) glColor3d(0.6, 0.6, 0.6);
-                else glColor3d(0.3, 0.3, 0.3);
+                if((i + j) % 2 == 0) glColor3f(0.6f, 0.6f, 0.6f);
+                else glColor3f(0.3f, 0.3f, 0.3f);
                 glPushMatrix();
-                glTranslated((j - BoxNum/2) * BoxSize, (i - BoxNum/2) * BoxSize, 0);
-                glTranslated(BoxSize/2, BoxSize/2, -BoxSize/2);
+                glTranslatef((j - BoxNum/2) * BoxSize, (i - BoxNum/2) * BoxSize, 0);
+                glTranslatef(BoxSize/2, BoxSize/2, -BoxSize/2);
                 gl::drawSolidCube(BoxSize);
                 glPopMatrix();
             }
@@ -41,16 +60,16 @@ void Window::display(void)
     }
 
     //胴体
-    glColor3d(0.0, 0.0, 1.0);
+    glColor3f(0.0, 0.0, 1.0);
     glPushMatrix();
-    glTranslated(0, 0, 750);
+    glTranslatef(0, 0, 750);
     if(m_displayMode == Solid) gl::drawSolidRectangular(400, 150, 500);
     else if(m_displayMode == Wire) gl::drawWireRectangular(400, 150, 500);
 
     //頭
-    glColor3d(0.0, 1.0, 0.0);
+    glColor3f(0.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslated(0, 0, 250);
+    glTranslatef(0, 0, 250);
     glRotated(neckAngleX, 1.0, 0.0, 0.0);
     glRotated(neckAngleY, 0.0, 1.0, 0.0);
     glRotated(neckAngleZ, 0.0, 0.0, 1.0);
@@ -59,57 +78,57 @@ void Window::display(void)
     glPopMatrix();
 
     //左腕
-    glColor3d(1.0, 0.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslated(200 + 60, 0, 200);
+    glTranslatef(200 + 60, 0, 200);
     glRotated(180 - shoulderAngleL, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     //左手
-    glColor3d(1.0, 0.0, 0.0);
-    glTranslated(0, 0, 300);
+    glColor3f(1.0, 0.0, 0.0);
+    glTranslatef(0, 0, 300);
     glRotated(-elbowAngleL, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     glPopMatrix();  //左腕
 
     //右腕
-    glColor3d(1.0, 0.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslated(-200 - 60, 0, 200);
+    glTranslatef(-200 - 60, 0, 200);
     glRotated(180 - shoulderAngleR, 1, 0, 0);   //-:腕前から挙げる
     if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     //右手
-    glTranslated(0, 0, 300);
+    glTranslatef(0, 0, 300);
     glRotated(-elbowAngleR, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(120, 120, 300);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(120, 120, 300);
     glPopMatrix();
 
     //左大腿
-    glColor3d(1.0, 1.0, 0.0);
+    glColor3f(1.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslated(100, 0, -250);
+    glTranslatef(100, 0, -250);
     glRotated(180 - hipAngleL, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
     //左足
-    glTranslated(0, 0, 250);
+    glTranslatef(0, 0, 250);
     glRotated(kneeAngleL, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
     glPopMatrix();
 
     //右大腿
-    glColor3d(1.0, 1.0, 0.0);
+    glColor3f(1.0, 1.0, 0.0);
     glPushMatrix();
-    glTranslated(-100, 0, -250);
+    glTranslatef(-100, 0, -250);
     glRotated(180 - hipAngleR, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
     //右足
-    glTranslated(0, 0, 250);
+    glTranslatef(0, 0, 250);
     glRotated(kneeAngleR, 1, 0, 0);
     if(m_displayMode == Solid) gl::drawSolidRectangular2(180, 180, 250);
     else if(m_displayMode == Wire) gl::drawWireRectangular2(180, 180, 250);
@@ -124,28 +143,28 @@ void Window::display(void)
 
 void Window::drawBlocks(void)
 {
-    double Size = 500; //1辺の長さ[mm]
+    float Size = 500; //1辺の長さ[mm]
     int BoxNum = 10;
 
     for (int i = 0; i < BoxNum; i++)
     {
-        if(i % 2 == 0) glColor3d(0.6, 0.6, 0.6);
-        else glColor3d(0.3, 0.3, 0.3);
+        if(i % 2 == 0) glColor3f(0.6f, 0.6f, 0.6f);
+        else glColor3f(0.3f, 0.3f, 0.3f);
 
         glPushMatrix();
-        glTranslated(1250, (double(i) + 0.5) * Size, 250);   //平行移動値の設定
+        glTranslatef(1250, (float(i) + 0.5f) * Size, 250);   //平行移動値の設定
         gl::drawSolidCube((float)Size);
         glPopMatrix();
         glPushMatrix();
-        glTranslated(1250, (double(i) + 0.5) * Size, 750);   //平行移動値の設定
+        glTranslatef(1250, (float(i) + 0.5f) * Size, 750);   //平行移動値の設定
         gl::drawSolidCube((float)Size);
         glPopMatrix();
         glPushMatrix();
-        glTranslated(1250, (double(i) + 0.5) * Size, 1250);   //平行移動値の設定
+        glTranslatef(1250, (float(i) + 0.5f) * Size, 1250);   //平行移動値の設定
         gl::drawSolidCube((float)Size);
         glPopMatrix();
         glPushMatrix();
-        glTranslated(1250, (double(i) + 0.5) * Size, 1750);   //平行移動値の設定
+        glTranslatef(1250, (float(i) + 0.5f) * Size, 1750);   //平行移動値の設定
         gl::drawSolidCube((float)Size);
         glPopMatrix();
     }
@@ -259,10 +278,9 @@ void Window::resize(int width, int height)
     glLoadIdentity();
 
     //カメラ座標、カメラ角度
-
     gluLookAt(
         m_cameraPos[0], m_cameraPos[1], m_cameraPos[2],
-        m_cameraPos[0] + m_cameraDir[0], m_cameraPos[1] + m_cameraDir[1], m_cameraPos[2] + m_cameraDir[2],
+        m_cameraDir[0], m_cameraDir[1], m_cameraDir[2],
         m_cameraUpward[0], m_cameraUpward[1], m_cameraUpward[2]
     );
 }

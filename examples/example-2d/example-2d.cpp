@@ -1,8 +1,18 @@
-#include "example-robot.hpp"
+#include <stdio.h>
+#include <windows.h>
+#include "opengl.hpp"
+
+class Window : public WindowBase
+{
+public:
+
+private:
+
+};
 
 int main(int argc, char** argv)
 {
-    Window window(1920, 1080, "example-robot", true);
+    Window window;
     window.glInit();
 
     while(window.isExist())

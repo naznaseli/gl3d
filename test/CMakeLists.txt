@@ -1,4 +1,4 @@
-set(target test-example)
+set(TARGET test-example)
 
 include(FetchContent)
 #if(NOT GLEW_FOUND)
@@ -24,21 +24,21 @@ include(FetchContent)
     #set(GLEW_LIBRARIES glew)
 #endif()
 
-add_executable(${target} test-example.cpp)
+add_executable(${TARGET} test-example.cpp)
 
-target_compile_options(${target}
+target_compile_options(${TARGET}
     PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
 )
 
-set_target_properties(${target} PROPERTIES FOLDER "${IDE_FOLDER}")
+set_target_properties(${TARGET} PROPERTIES FOLDER "${IDE_FOLDER}")
 
-target_include_directories(${target}
+target_include_directories(${TARGET}
     PRIVATE
     ${PROJECT_SOURCE_DIR}/src
 )
 
-target_link_libraries(${target}
+target_link_libraries(${TARGET}
     PRIVATE
     gtest
     gtest_main

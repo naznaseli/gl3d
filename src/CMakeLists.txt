@@ -1,6 +1,6 @@
-set(target opengl)
+set(TARGET libopengl)
 
-set(SRCS
+set(SOURCES
     opengl.cpp
     draw.cpp
 )
@@ -85,19 +85,21 @@ set(LIBRARIES
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # Add libraries
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-add_library(${target} STATIC ${SRCS})
+add_library(${TARGET} STATIC ${SOURCES})
 
-target_compile_options(${target}
-    PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
-)
+if(MSVC)
+    target_compile_options(${TARGET}
+        PRIVATE $<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>
+        PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>
+    )
+endif()
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # Include Directories
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-target_include_directories(${target} PUBLIC ${INCLUDE_DIRECTORIES})
+target_include_directories(${TARGET} PUBLIC ${INCLUDE_DIRECTORIES})
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 # Link libraries
 #++++++++++++++++++++++++++++++++++++++++++++++++++
-target_link_libraries(${target} PUBLIC ${LIBRARIES})
+target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
