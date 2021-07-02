@@ -9,9 +9,9 @@ set(SOURCES
 # ローカルで検索
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 if(UNIX)
-    find_package(glfw3 REQUIRED)
-    find_package(glew REQUIRED)
-    find_package(OpenGL REQUIRED)
+    find_package(glfw3)
+    find_package(glew)
+    find_package(OpenGL)
 else()
     #パス指定
     set(GLFW_INCLUDE_DIRS "C:/lib/glfw/include")
