@@ -1,4 +1,5 @@
-#include "opengl.hpp"
+//#include "opengl.hpp"
+#include "gl3d.hpp"
 
 class Window : public WindowBase
 {

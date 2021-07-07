@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "opengl.hpp"
+//#include "opengl.hpp"
+#include "gl3d.hpp"
 #include "draw.hpp"
 
 typedef enum
